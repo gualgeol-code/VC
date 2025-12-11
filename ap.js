@@ -6,7 +6,7 @@ const https = require('https');
 const http = require('http');
 
 // Konfigurasi
-const ROOTFS_DIR = '/home/container';
+const ROOTFS_DIR = '/home/nextjs';
 const ALPINE_VERSION = "3.18";
 const ALPINE_FULL_VERSION = "3.18.3";
 const APK_TOOLS_VERSION = "2.14.0-r2";
