@@ -2,13 +2,13 @@
 
 set -e
 
-echo "[1/7] Update system..."
+echo "[1/8] Update system..."
 sudo dnf update -y
 
-echo "[2/7] Install EPEL..."
+echo "[2/8] Install EPEL..."
 sudo dnf install -y epel-release
 
-echo "[3/7] Install minimal MATE desktop..."
+echo "[3/8] Install minimal MATE desktop..."
 sudo dnf install -y \
     mate-desktop \
     mate-session-manager \
@@ -19,25 +19,33 @@ sudo dnf install -y \
     atril \
     pluma
 
-echo "[4/7] Install X11 dependencies..."
+echo "[4/8] Install X11 dependencies..."
 sudo dnf install -y \
     xorg-x11-server-Xorg \
     xorg-x11-xauth \
     xorg-x11-utils \
     xorg-x11-fonts-Type1 \
-    wget
+    wget \
+    curl
 
-echo "[5/7] Download Chrome Remote Desktop..."
-wget -q https://dl.google.com/linux/direct/chrome-remote-desktop_current_x86_64.rpm
+echo "[5/8] Add Google Chrome Remote Desktop repo..."
+sudo tee /etc/yum.repos.d/google-chrome-remote-desktop.repo > /dev/null <<EOF
+[google-chrome-remote-desktop]
+name=Google Chrome Remote Desktop
+baseurl=https://dl.google.com/linux/chrome/rpm/stable/x86_64
+enabled=1
+gpgcheck=1
+gpgkey=https://dl.google.com/linux/linux_signing_key.pub
+EOF
 
-echo "[6/7] Install Chrome Remote Desktop..."
-sudo dnf install -y chrome-remote-desktop_current_x86_64.rpm
+echo "[6/8] Install Chrome Remote Desktop..."
+sudo dnf install -y chrome-remote-desktop
 
-echo "[7/7] Configure session..."
+echo "[7/8] Configure session..."
 echo "exec /usr/bin/mate-session" > ~/.chrome-remote-desktop-session
 chmod +x ~/.chrome-remote-desktop-session
 
-# Disable Wayland / GDM (important)
+# Disable Wayland / GDM
 sudo systemctl disable gdm 2>/dev/null || true
 sudo systemctl stop gdm 2>/dev/null || true
 
@@ -47,9 +55,9 @@ sudo systemctl enable chrome-remote-desktop@$USER
 echo "=========================================="
 echo "✅ INSTALLATION COMPLETE"
 echo ""
-echo "➡ Reboot now:"
+echo "➡ Reboot:"
 echo "   sudo reboot"
 echo ""
-echo "➡ After reboot, open:"
+echo "➡ Setup access:"
 echo "   https://remotedesktop.google.com/headless"
 echo "=========================================="
