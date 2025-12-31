@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# ===============================
-# Chrome Remote Desktop - Light
-# CentOS 9 / Rocky / Alma
-# ===============================
-
 set -e
 
 echo "[1/7] Update system..."
@@ -13,7 +8,7 @@ sudo dnf update -y
 echo "[2/7] Install EPEL..."
 sudo dnf install -y epel-release
 
-echo "[3/7] Install minimal MATE Desktop..."
+echo "[3/7] Install minimal MATE desktop..."
 sudo dnf install -y \
     mate-desktop \
     mate-session-manager \
@@ -24,13 +19,12 @@ sudo dnf install -y \
     atril \
     pluma
 
-echo "[4/7] Install required X11 dependencies..."
+echo "[4/7] Install X11 dependencies..."
 sudo dnf install -y \
     xorg-x11-server-Xorg \
     xorg-x11-xauth \
     xorg-x11-utils \
     xorg-x11-fonts-Type1 \
-    redhat-lsb \
     wget
 
 echo "[5/7] Download Chrome Remote Desktop..."
@@ -43,7 +37,7 @@ echo "[7/7] Configure session..."
 echo "exec /usr/bin/mate-session" > ~/.chrome-remote-desktop-session
 chmod +x ~/.chrome-remote-desktop-session
 
-# Disable Wayland / GDM if exists
+# Disable Wayland / GDM (important)
 sudo systemctl disable gdm 2>/dev/null || true
 sudo systemctl stop gdm 2>/dev/null || true
 
@@ -58,6 +52,4 @@ echo "   sudo reboot"
 echo ""
 echo "➡ After reboot, open:"
 echo "   https://remotedesktop.google.com/headless"
-echo ""
-echo "➡ Choose: 'Set up another computer'"
 echo "=========================================="
